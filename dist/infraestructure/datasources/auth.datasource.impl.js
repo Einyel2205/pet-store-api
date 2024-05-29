@@ -10,13 +10,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthDataSourceImpl = void 0;
-const domain_1 = require("../../domain");
+const domain_1 = require("../../domain"); //2
+const users_model_1 = require("../../data/models/users.model"); // 9
 class AuthDataSourceImpl {
     register(registerUserDto) {
         return __awaiter(this, void 0, void 0, function* () {
             const { name, email, password } = registerUserDto;
             try {
-                return new domain_1.UserEntity('1', name, email, password, ['USER']);
+                //verificar si el correo existe 
+                const exists = yield users_model_1.userModel.findOne({ email });
+                if (exists)
+                    throw domain_1.CustomError.badRequest("User already exists");
+                //crear al usuario
+                const user = yield users_model_1.userModel.create({
+                    name: name,
+                    email: email,
+                    password: password,
+                });
+                //guardar el usuario en la base de datos 
+                yield user.save();
+                //TODO: Hash de contraseña
+                //TODO: Mapear la respuesta a nuestra cantidad
+                return new domain_1.UserEntity(user.id, name, email, password, user.roles);
             }
             catch (error) {
                 if (error instanceof domain_1.CustomError) {
