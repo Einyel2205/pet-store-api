@@ -1,4 +1,4 @@
-import { validators } from "../../../config/envs"; // 7
+import { validators } from "../../../config"; // 7
 
 export class RegisterUserDto { // 1
     // 3

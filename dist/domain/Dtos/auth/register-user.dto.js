@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterUserDto = void 0;
-const envs_1 = require("../../../config/envs"); // 7
+const config_1 = require("../../../config"); // 7
 class RegisterUserDto {
     // 3
     constructor(name, email, password) {
@@ -15,7 +15,7 @@ class RegisterUserDto {
             return ['Missing name'];
         if (!email)
             return ['Missing email'];
-        if (!envs_1.validators.email.test(email))
+        if (!config_1.validators.email.test(email))
             return ['Email is not valid']; // 8
         if (!password)
             return ['Missing password'];
